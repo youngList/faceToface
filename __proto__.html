@@ -1,0 +1,63 @@
+<!--
+ * @Author: ygw
+ * @Date: 2020-03-24 16:30:27
+ * @LastEditors: your name
+ * @LastEditTime: 2020-03-25 11:12:07
+ * @Description: file content
+ * @FilePath: /faceToFace/__proto__.html
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>class 继承</title>
+</head>
+<body>
+  <code>
+      1 __proto__指向不同，如下例，abc.__proto__ === Function.prototype, 而Country.__proto__ === Club
+      2 
+  </code>
+  <script>
+    class Club {
+      constructor() {
+        this.name = 'ygw'
+      }
+    }
+
+    class Country extends Club{
+      constructor(){
+        super()
+        this.age = 10
+      }
+    }
+
+    console.log(Country.__proto__ === Club)
+
+    console.log(Country)
+
+    function ABC() {
+      this.a = 1
+    }
+    const abc = () => {}
+    abc.prototype = new ABC()
+    abc.prototype.constructor = abc
+    console.log(abc.__proto__ === Function.prototype)
+
+
+    function es5Array() {
+      Array.call(this, arguments)
+    }
+    function es5Array1() {}
+    es5Array1.prototype = new Array()
+    es5Array1.prototype.constructor = es5Array1
+    class es6Array extends Array{
+    }
+    console.log(new es5Array())
+    console.log(new es6Array())
+    console.log(new es5Array1())
+    console.log(new Array())
+  </script>
+</body>
+</html>

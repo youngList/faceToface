@@ -1,0 +1,92 @@
+<!--
+ * @Author: ygw
+ * @Date: 2020-03-31 15:41:35
+ * @LastEditors: your name
+ * @LastEditTime: 2020-04-01 11:29:18
+ * @Description: file content
+ * @FilePath: /faceToFace/new.html
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    a{
+      text-decoration: none
+    }
+    .title_ul, .title_ul>li{
+      list-style: none;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <ul class="title_ul">
+    <li>
+      <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new">【MDN】</a>
+      创建一个空的简单JavaScript对象（即{}）
+    </li>
+    <li>
+        <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new">【MDN】</a>
+        链接该对象（即设置该对象的构造函数）到另一个对象</li>
+    <li>
+        <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new">【MDN】</a>
+        将步骤1新创建的对象作为this的上下文</li>
+    <li>
+        <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new">【MDN】</a>
+        如果该函数没有返回对象，则返回this</li>
+  </ul>
+  <code>
+    <h1>eg: const obj = new Foo()</h1>
+    
+    <ul>
+      <li>
+        <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new">【MDN】</a>
+        一个继承自 Foo.prototype 的新对象被创建。
+      </li>
+      <h3>【Me】let newObj = Object.create(Foo.prototype)</h3>
+      
+      <li>
+        <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new">【MDN】</a>
+        使用指定的参数调用构造函数 Foo，并将 this 绑定到新创建的对象。new Foo 等同于 new Foo()，也就是没有指定参数列表，Foo 不带任何参数调用的情况。
+      </li>
+      <h3>
+        【Me】Foo.apply(newObj, arguments)
+      </h3>
+      <li>
+        <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new">【MDN】</a>
+        由构造函数返回的对象就是 new 表达式的结果。如果构造函数没有显式返回一个对象，则使用步骤1创建的对象。（一般情况下，构造函数不返回值，但是用户可以选择主动返回对象，来覆盖正常的对象创建步骤）
+      </li>
+      <h3>
+        【Me】const result = Foo(...arguments) <br>
+        return (result && Object.prototype.toString.call(result).slice(8, -1) === 'Object') ? result : newObj
+      </h3>
+    </ul>
+  </code>
+  <script>
+    function _new() {
+      let constructor = Array.prototype.shift.call(arguments)
+      let obj = Object.create(constructor.prototype)
+      const result = constructor.apply(obj, arguments)
+      return (result && Object.prototype.toString(result).slice(8, -1) === 'Object') ? result : obj
+    }
+
+    function Cat(name, age, male) {
+      this.name = name
+      this.age = age
+      this.male = male
+      // return this
+    }
+    Cat.prototype.sayName = function() {
+      console.log(`${this.name}今年${this.age}岁了，是个${this.male}孩子！`)
+    }
+
+    const cat = _new(Cat, 'mimi', 18, '男')
+    console.log(cat)
+    cat.sayName()
+  </script>
+</body>
+</html>

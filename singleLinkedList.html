@@ -1,0 +1,234 @@
+<!--
+ * @Author: ygw
+ * @Date: 2020-04-01 11:30:20
+ * @LastEditors: your name
+ * @LastEditTime: 2020-04-02 16:21:23
+ * @Description: file content
+ * @FilePath: /faceToFace/singleLinkedList.html
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>单向链表</title>
+</head>
+<body>
+  <script>
+    function linkedNode(value, next) {
+      this.value = value
+      this.next=next || null
+    }
+    // head -> first -> second -> ... -> last -> null
+    class SingleLinkedList{
+      constructor(props) {
+        this.head = new linkedNode('head')
+        this.last = this.head
+        props && this.insert(props)
+      }
+      // 插入
+      insert = (elementList, target) => {
+        if (Array.isArray(elementList)) {
+          if (target) {
+            try {
+              let current = this.find(target)
+              elementList.map(item => {
+                const newNode = new linkedNode(item)
+                if (current.value === this.last.value){
+                  this.last = newNode
+                }
+                newNode.next = current.next
+                current.next = newNode
+                current = newNode
+              })
+            } catch(e) {
+              console.log('反正找不到，操作无效')
+            }
+          } else {
+            elementList.map(item => {
+              const newNode = new linkedNode(item)
+                this.last.next = newNode
+                this.last = newNode
+            })
+          }
+          // this.setLast(target)
+        } else {
+          const newNode = new linkedNode(elementList)
+          if (target) {
+            try{
+              const current = this.find(target)
+              if (current.value === this.last.value) {
+                this.last = newNode
+              }
+              newNode.next = current.next
+              current.next = newNode
+            } catch (e) {
+              console.log('反正找不到，操作无效')
+            }
+          } else {
+            this.last.next = newNode
+            this.last = newNode
+          }
+          // this.setLast()
+        }
+      }
+
+      // 删除
+      delete = (target) => {
+        try{
+          if (Array.isArray(target)) {
+            let current = this.head
+            while(current) {
+              if (target.includes(current.value)) {
+                const pre = this.findPre(current.value)
+                pre.next = current.next
+              }
+              current = current.next
+            }
+          } else {
+            const current = this.find(target)
+            const pre = this.findPre(target)
+            pre.next = current.next
+          }
+        } catch(e) {
+          console.log('反正找不到，你随意删除')
+        }
+      }
+
+      // 修改
+      edit = (value, target) => {
+        let current = this.find(target)
+        current.value = value
+      }
+
+      // 查找上一节点
+      findPre = (target) => {
+        let current = this.head
+        while(current && current.next.value !== target) {
+          current = current.next
+        }
+        if (current) {
+          return current
+        } else {
+          throw Error('找不到给定的节点')
+        }
+      }
+
+      // 设置last的位置
+      setLast = (target) => {
+        let current = target
+        if (current === undefined) {
+          current = this.last
+        }
+        while(current && current.next) {
+          current = current.next
+        }
+        this.last = current
+      }
+
+      // 查找给定节点值
+      find = (target) => {
+        let current = this.head
+        while(current && current.value !== target) {
+          current = current.next
+        }
+        if (current) {
+          return current
+        } else {
+          throw Error(`您选择的位置(${target})无效`)
+        }
+      }
+
+      // 展示链表信息
+      display = () => {
+        let current = this.head.next
+        let sum = ''
+        while(current) {
+          sum += current.value
+          current= current.next
+        }
+        return sum || null
+      }
+
+      reverseDisplay = () => {
+        return Number(this.display().split('').reverse().join(''))
+      }
+    }
+
+    function listAdd(list1, list2, list3= new SingleLinkedList()) {
+      let l1 = list1.head.next
+      let l2 = list2.head.next
+      let sum = 0, flag = 0
+      while (l1 || l2) {
+        if (l1) {
+          sum += l1.value
+          l1 = l1.next
+        }
+        if (l2) {
+          sum += l2.value
+          l2 = l2.next
+        }
+        sum += flag
+        if (sum > 9) {
+          sum = sum - 10
+          flag = 1
+        } else {
+          flag = 0
+        }
+        list3.insert(sum)
+        sum = 0
+      }
+      if (flag) {list3.insert(flag)}
+      return list3
+    }
+
+    try{
+      // const singLink = new SingleLinkedList()
+      // console.log(singLink.display())
+      // singLink.insert(1)
+      // console.log(singLink.display())
+      // singLink.insert(3, 1)
+      // console.log(singLink.display())
+      // singLink.insert(2, 1)
+      // console.log(singLink.display())
+      // singLink.insert(2, 4)
+      // console.log(singLink.display())
+      // singLink.insert([4,5,6,7])
+      // console.log(singLink.display())
+      // singLink.insert([8,9,0], 5)
+      // console.log(singLink.display())
+      // singLink.delete(8)
+      // console.log(singLink.display())
+      // singLink.delete(10)
+      // console.log(singLink.display())
+      // singLink.delete([4,9,0,8])
+      // console.log(singLink.display())
+      // singLink.edit(4,5)
+      // console.log(singLink.display())
+      // const singLink = new SingleLinkedList([1,2,3,4,5])
+      // console.log(singLink.display())
+      // 加法方法一
+      const l1 = new SingleLinkedList([3,4,5])
+      const l2 = new SingleLinkedList([7,4,5])
+      const l3 = listAdd(l1, l2)
+      
+      console.log(
+        `${l1.reverseDisplay()} + ${l2.reverseDisplay()} = ${l3.reverseDisplay()}`,
+        `${l1.reverseDisplay() + l2.reverseDisplay()}`,
+        )
+      // 加法方法二
+      const list3 = new SingleLinkedList()
+      const sum = String(l1.reverseDisplay() + l2.reverseDisplay()).split('').reverse()
+      list3.insert(sum)
+      console.log(list3.reverseDisplay())
+    } catch(err) {
+      console.log(err)
+    }
+    
+    
+
+
+  </script>
+</body>
+</html>

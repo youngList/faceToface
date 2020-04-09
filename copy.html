@@ -1,0 +1,242 @@
+<!--
+ * @Author: ygw
+ * @Date: 2020-03-05 18:10:32
+ * @LastEditors: your name
+ * @LastEditTime: 2020-03-24 16:33:53
+ * @Description: file content
+ * @FilePath: /faceToFace/copy.html
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>拷贝函数</title>
+</head>
+<body>
+  <script>
+    const isObjOrArr = (item) => ['object', 'array'].includes(Object.prototype.toString.call(item).slice(8, -1).toLowerCase());
+    const isObj = (item) => ['object'].includes(Object.prototype.toString.call(item).slice(8, -1).toLowerCase());
+    const isArr = (item) => ['array'].includes(Object.prototype.toString.call(item).slice(8, -1).toLowerCase());
+// const diyCopy = (item, deep=1, num = 0, target=null) => {
+//   if (deep === 0) {
+//     return item
+//   }
+//     if (isObjOrArr(item)) {
+//       if (!target) {
+//         target = isArr(item) ? [] : {}
+//       }
+//         if (num < deep) {
+//             num ++
+//             for(let key in item) {
+//               if(isObjOrArr(item[key]) && num < deep){
+//                 target[key] = isArr(item[key]) ? [] : {}
+//                 diyCopy(item[key], deep, num, target[key])
+//               } else {
+//                 target[key] = (item[key])
+//               }
+//             }
+//         }
+//     }
+//     return target
+// }
+// // 数组
+// var arr = [1,2,3,4]
+// var newArr = diyCopy(arr)
+// var newArr1 = diyCopy(arr, 0)
+// arr[1] = 10;
+// console.log(arr, newArr, newArr1)
+// // 对象
+// var obj = {name: 'ygw', age: '18', sex: 'male'}
+// var newObj = diyCopy(obj)
+// var newObj1 = diyCopy(obj, 0)
+// obj.name = 'sjj'
+// console.log(obj, newObj, newObj1)
+// // 多元数组
+// var mulArr = [
+//   '吉林省', 
+//   '黑龙江', 
+//   [
+//     '广东省-广州', 
+//     '广东省-深圳'
+//   ], 
+//   [
+//     '山西省-吕梁',
+//     '山西省-忻州',
+//     [
+//       '山西省-太原市-清徐', 
+//       '山西省-太原市-小店'
+//     ]
+//   ]
+// ]
+// var newMulArr = diyCopy(mulArr, 2)
+// var newMulArr1 = diyCopy(mulArr, 0)
+// var newMulArr2 = diyCopy(mulArr, Infinity)
+// mulArr[0] = 0
+// mulArr[2][1] = '2-1'
+// mulArr[3][0] = '3-0'
+// mulArr[3][2][0] = '3-2-0'
+// console.log(mulArr, newMulArr, newMulArr1, newMulArr2)
+// // 多元对象
+// var mulObj = {
+//   name: '地名',
+//   jl: {
+//     name: '吉林省',
+//   },
+//   sx: {
+//     name: '山西省',
+//     child: [
+//       {
+//         name: '太原市',
+//         child: [
+//           {
+//             name: '小店'
+//           },
+//           {
+//             name: '清徐'
+//           }
+//         ]
+//       },
+//       {
+//         name: '忻州市'
+//       }
+//     ]
+//   }
+// }
+
+// var mulObj0 = diyCopy(mulObj, 0)
+// var mulObj1 = diyCopy(mulObj, 1)
+// var mulObj2 = diyCopy(mulObj, 2)
+// var mulObjMax = diyCopy(mulObj, Infinity)
+// mulObj.name = 'feel name'
+// mulObj.feel = 'ok'
+
+// mulObj.jl.name = 'feel name'
+// mulObj.jl.feel = 'good'
+
+// mulObj.sx.child[1].name = 'feel name'
+// mulObj.sx.child[1].feel = 'no feel'
+
+// mulObj.sx.child[0].name = 'feel name'
+// mulObj.sx.child[0].feel = 'great'
+
+// mulObj.sx.child[0].child[0].name = 'feel name'
+// mulObj.sx.child[0].child[0].feel = 'yes'
+// console.log(mulObj0, mulObj1, mulObj2, mulObjMax)
+
+
+// Breadth First Search
+// const diyBFSCopy = (item, target=null) => {
+//   let arr = []
+//   if (isObjOrArr(item)) {
+//     arr.push(item)
+//     target = isArr(item) ? [] : {}
+//     while(arr.length) {
+//       let current = arr.pop()
+//       for(let key in current) {
+//         if (isObjOrArr(current[key])){
+//           target[key] = isArr(current[key]) ? [] : {}
+//           arr.unshift(current[key])
+//         } else {
+//           target[key] = current[key]
+//         }
+//       }
+//     }
+//     return target
+//   }
+//   return item
+// }
+
+// var father = {
+//     name: '11',
+//     child: [
+//       {
+//         name: '11-11',
+//         child: [
+//           {
+//             name: '11-11-11'
+//           },
+//           {
+//             name: '11-11-22'
+//           }
+//         ]
+//       },
+//       {
+//         name: '11-22',
+//       },
+//       {
+//         name: '11-33',
+//         child: [
+//           {
+//             name: '11-33-11'
+//           },
+//           {
+//             name: '11-33-22'
+//           }
+//         ]
+//       }
+//     ]
+//   }
+//   const fatherCopy = diyBFSCopy(father)
+//   father.name = '1&1'
+//   console.log(fatherCopy)
+
+const root = {
+  name: 'ygw',
+  children: [
+    {
+      name: 'sjj',
+      age: 18
+    },
+    {
+      name: 'sjjj',
+      age: 19
+    },
+    {
+      name: 'xyy',
+      age: 30,
+      child: [
+        'yyy',
+        'xxxx'
+      ]
+    },
+    {
+      name: 'xyyy',
+      age: 30,
+      child: {
+        name: 'xxxxx',
+        age: 50
+      }
+    }
+  ]
+}
+
+const bfs = (root, target = null) => {
+  target = isArr(root) ? [] : {}
+  let arr = []
+  arr.push([root, target])
+  while (arr.length) {
+    let [cur, tar] = arr.pop()
+    for (let key in cur) {
+      if (isObjOrArr(cur[key])) {
+        tar[key] = isArr(cur[key]) ? [] : {}
+        arr.push([cur[key], tar[key]])
+      } else {
+        tar[key] = cur[key]
+      }
+    }
+  }
+  return target
+}
+
+const newRoot = bfs(root)
+
+root.name += '11'
+root.children[0].name += '111'
+root.children[2].child[0] += '1111'
+
+console.log(root, newRoot)
+  </script>
+</body>
+</html>

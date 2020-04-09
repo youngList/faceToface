@@ -1,0 +1,64 @@
+<!--
+ * @Author: ygw
+ * @Date: 2020-03-20 16:03:04
+ * @LastEditors: your name
+ * @LastEditTime: 2020-03-23 15:19:31
+ * @Description: file content
+ * @FilePath: /faceToFace/bibao.html
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>闭包实现防抖和截流</title>
+</head>
+<body>
+  <div>click me</div>
+  <script>
+    console.time()
+
+    const deBounce = (fn) => {
+      let timeout = null
+      return () => {
+        if (timeout) clearTimeout(timeout)
+        timeout = setTimeout(() => {
+          fn()
+        }, 500)
+      }
+    }
+
+    const throttle = (fn) => {
+      let timeout = null
+      return () => {
+        if (!timeout) {
+          timeout = setTimeout(() => {
+            clearTimeout(timeout)
+            timeout = null
+            fn()
+            console.log(timeout)
+          }, 1000)
+        }
+        
+      }
+    }
+
+    const conLog = () => {console.log('ygw'); console.timeEnd()}
+
+    document.querySelector('div').onclick = throttle(conLog)
+    // const aa = deBounce(conLog)
+
+    // let i = 0
+
+    // const intval = setInterval(() => {
+    //   if (i == 10) {
+    //     clearInterval(intval)
+    //   }
+    //   i++
+    //   aa(i)
+    // }, 1000)
+
+  </script>
+</body>
+</html>

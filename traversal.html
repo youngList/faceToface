@@ -1,0 +1,97 @@
+<!--
+ * @Author: ygw
+ * @Date: 2020-03-04 21:35:19
+ * @LastEditors: your name
+ * @LastEditTime: 2020-03-23 16:50:14
+ * @Description: file content
+ * @FilePath: /faceToFace/traversal.html
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>遍历相关</title>
+</head>
+<body>
+  hello 遍历
+  <script>
+    const getNodeMsg = (node, nodes = []) => {
+      if(node !== null) {
+        nodes.push(node.value)
+        let child = node.children
+        child && child.map(item => {
+          getNodeMsg(item, nodes)
+        })
+      }
+      return nodes
+    }
+    const getNodeValue = (node) => {
+      let nodes = []
+      if (node) {
+        nodes.push(node)
+        while(nodes.length) {
+          let last = nodes.shift()
+          console.log(last.value)
+          let children = last.children
+          children && children.map(item => {
+            nodes.unshift(item)
+          })
+        }
+      }
+    }
+    
+    const root = {
+      value: 0,
+      children: [
+        {
+          value: 1.1,
+          children: [
+            {
+              value: 2.1,
+              children: [
+                {
+                  value: 3.1
+                }
+              ]
+            },
+            {
+              value: 2.2,
+              children: []
+            }
+          ]
+        },
+        {
+          value: 1.2,
+          children: [
+            {
+              value: '1-2-1',
+              children: []
+            }
+          ]
+        }
+      ]
+    }
+    // let treeNodes = getNodeMsg(root)
+    // let treeNodes = getNodeValue(root)
+    // console.log(treeNodes)
+
+    const deepTraversal = (root) => {
+      let arr = []
+      arr.push(root)
+      while(arr.length) {
+        let cur = arr.pop()
+        console.log(cur.value)
+        if (cur.children) {
+          for(let i = cur.children.length - 1; i>= 0; i--) {
+            arr.push(cur.children[i])
+          }
+        }
+      }
+    }
+
+    deepTraversal(root)
+  </script>
+</body>
+</html>

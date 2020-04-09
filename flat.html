@@ -1,0 +1,190 @@
+<!--
+ * @Author: ygw
+ * @Date: 2020-03-27 15:47:49
+ * @LastEditors: your name
+ * @LastEditTime: 2020-03-31 04:21:43
+ * @Description: file content
+ * @FilePath: /faceToFace/flat.html
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+</head>
+<body>
+  <script>
+    // var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10]
+    // arr = Array.from(new Set(arr.flat(Infinity))).sort((a, b) => a-b)
+    // console.log(arr)
+
+
+
+
+    var arrObj = [
+        {
+            id: null,
+            title: "租赁合同导出，值条款属性载体",
+            name: "com.yh.p2a.scon.domain.vo.RentContractExportPropertyVO",
+            parentId: null,
+            order: "1",
+            type: "合同基本信息",
+            code: "1",
+            children: [
+                {
+                    id: "2",
+                    title: "合同编号",
+                    name: "contractNumber",
+                    parentId: "1",
+                    order: "10",
+                    type: "java.lang.String",
+                    code: "1",
+                    children: null
+                },
+                {
+                    id: "27",
+                    title: "合同电梯信息",
+                    name: "rentElevators",
+                    parentId: "1",
+                    order: "11",
+                    type: "java.util.List",
+                    code: "42",
+                    children: [
+                        {
+                            id: "11",
+                            title: "电梯类型",
+                            name: "elevatorTypeMeaning",
+                            parentId: "11",
+                            order: "111",
+                            type: "java.lang.String",
+                            code: "1",
+                            children: null
+                        },
+                        {
+                            id: "12",
+                            title: "数量",
+                            name: "elevatorCount",
+                            parentId: "11",
+                            order: "112",
+                            type: "java.lang.Long",
+                            code: "422",
+                            children: null
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+    function mapArr(arr, handleArr=[]) {
+        arr.forEach(ele => {
+          handleArr.push(ele)
+          if (ele.children && ele.children.length) {
+            mapArr(ele.children, handleArr)
+          }
+        });
+        return handleArr
+        
+    }
+    var t = mapArr(arrObj)
+    console.log(t)
+    // function aaaa(arr, key, target={}) {
+    //    newObj = {...target}
+    //   if (key) {
+    //     const obj = arr.find(item => item.order === key)
+    //   if (newObj.order) {
+    //     if (!obj.children) {
+    //       obj.children = []
+    //     }
+    //     obj.children = [newObj]
+    //   }
+    //   aaaa(arr, obj.parentId, obj)
+    //   return newObj
+    //   } else {
+    //     return newObj
+    //   }
+    // }
+      let obj = {}
+    const aaaa = (arr, key, target) => {
+      obj = arr.find(item => item.order === key)
+      if (target) {
+        obj.children = [target]
+      }
+      if (obj.parentId) {
+        aaaa(arr, obj.parentId, obj)
+      }
+    }
+    
+    aaaa(t, '112')
+    console.log(obj)
+
+    var aa = {
+      id: 1,
+      name: 'ygw1',
+      children: [
+        {
+          id: 11,
+          name: 'ygw11',
+          children: [
+            {
+              id: 111,
+              name: 'ygw111'
+            }
+          ]
+        }
+      ]
+    }
+    var bb = {
+      id: 1,
+      name: 'ygw1',
+      children: [
+        {
+          id: 11,
+          name: 'ygw11',
+          children: [
+            {
+              id: 112,
+              name: 'ygw112'
+            }
+          ]
+        },
+        {
+          id: 12,
+          name: 'ygw12'
+        }
+      ]
+    }
+    let mergeObj = {}
+    const mergeJson = (obj1, obj2, sign) => {
+      if (obj1[sign] === obj2[sign]) {
+        if (obj2.children)
+      } else {
+        return [
+          obj1,
+          obj2
+        ]
+      }
+    }
+    const mergeArr = (arr1, arr2) => {
+      if (arr1 && arr2) {
+        for (let i = 0; i < arr2.length; i++) {
+          let obj = arr1.find(item => item.id === arr2[i].id)
+          if (!obj) {
+            arr1.push(arr2[i])
+          }
+        }
+        return [...arr1]
+      } else if (!arr1 && !arr2) {
+        return null
+      } else if (!arr1 && arr2) {
+        return [...arr2]
+      } else {
+        return [...arr1]
+      }
+    }
+
+  </script>
+</body>
+</html>

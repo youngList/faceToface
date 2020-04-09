@@ -1,0 +1,178 @@
+<!--
+ * @Author: ygw
+ * @Date: 2020-03-26 14:51:04
+ * @LastEditors: your name
+ * @LastEditTime: 2020-04-09 17:07:37
+ * @Description: file content
+ * @FilePath: /faceToFace/generator.html
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>generate</title>
+</head>
+<body>
+  <div>怎么把obj弄成可自定义的？
+  </div>
+  <button>click</button>
+  <script>
+    function genObj() {
+      let index = -1
+      console.log(arguments[0])
+      arguments[0] && localStorage.setItem('genObj', JSON.stringify(arguments[0]))
+      let keys = Object.entries(arguments[0] || JSON.parse(localStorage.getItem('genObj')))
+      return {
+        next: () => {
+          index = index + 1
+          return {done: index === keys.length, value: keys[index]}
+        },
+        [Symbol.iterator]: genObj
+      }
+    }
+    // const obj = {
+    //     name: 'ygw',
+    //     age: 18,
+    //     male: true,
+    //     height: 160,
+    //     weight: 128
+    //   }
+    // let g = genObj(obj)
+    // console.log(g.next())
+    // console.log(g.next())
+    // console.log(g.next())
+    // console.log(g.next())
+    // console.log(g.next())
+    // console.log(g.next())
+    // for (let i of g) {
+    //   console.log(i)
+    // }
+
+
+
+    // function* test(x){
+    //   console.log('x', x)
+    //   const y = 2 * (yield (x+1))
+    //   console.log('y', y)
+    //   const z = (yield(y / 3))
+    //   console.log('z', z)
+    //   return (x + y + z)
+    // }
+
+    // let gs = test(5)
+
+    // function* fibonacci() {
+    //   let [prev, curr] = [0, 1];
+    //   while(true){
+    //     yield prev;
+    //   [prev, curr] = [curr, prev + curr];
+    //   }
+    // }
+
+    // const gs = fibonacci()
+
+    // const test = function* (x, y) {
+    //   console.log(yield 2)
+    //   const result = yield x + y
+    //   console.log(result)
+    //   return 7
+    // }
+
+    // const gs = test(1,2)
+
+    // let pre = 0
+    // document.querySelector('button').onclick = function() {
+    //   // pre = gs.next(pre).value
+    //   // console.log(pre)
+    //   console.log(gs.next())
+    // }
+
+    // function* main() {
+    //     var result = yield request();
+    //     console.log(result);
+    //   }
+
+      // var request = () => {
+      //   new Promise((resolve, reject) => {
+      //     setTimeout(() => {
+      //       it.next(1121)
+      //     }, 1000)
+      //   })
+        
+      // }
+      // var request = () => new Promise((resolve, reject) => {
+      //   setTimeout(function(){it.next(1123)},1000)
+      // })
+
+      // var it = main();
+      // it.next();
+
+      const fetchUrl = url => fetch(url, {headers: {
+            "login-token": "rme87e75d42b9004f429e19cc2ab97a72ae"
+          }}).then(data => data.json(data))
+
+      const isPromise = (res) => {
+        return Object.prototype.toString.call(res).slice(8, -1) === 'Promise'
+      }
+      const isFunction = fn => Object.prototype.toString.call(fn).slice(8, -1) === 'Function'
+
+      const isGeneratorFunction = gen => Object.prototype.toString.call(gen).slice(8, -1) === 'GeneratorFunction'
+
+
+      const gen = function* () {
+        try{
+          const result = yield fetchUrl('http://xszt-test2.yh-soi-manage-productcenter.xszt-001.sitapis.yonghui.cn/store/getBaseEnums/BusinessStatus')
+          const result1 = yield fetchUrl('http://xszt-test2.yh-soi-coupon-center.xszt-001.sitgw.yonghui.cn/coupon/activity/findCouponEnumByGroupValue/couponOrderType')
+          yield 1
+          return {result, result1}
+        } catch(e) {
+          console.log(e)
+        }
+      }
+      // const ge = gen()
+      // const res = ge.next()
+      // res.value.then(re => {
+      //   const res1 = ge.next(re)
+      //   res1.value.then(re1 => {
+      //     ge.next(re1)
+      //   })
+      // })
+
+      const genThunk = (gen) => {
+        return new Promise((resolve, reject) => {
+          if (isGeneratorFunction(gen)) {
+            gen = gen()
+          }
+          if (!gen || !isFunction(gen.next)) {
+            return resolve(gen)
+          }
+          const next = (res) => {
+            let result = null
+            try{
+              result = gen.next(res)
+            } catch(e) {
+              reject(e)
+            }
+            if (result.done) {
+              return resolve(result.value)
+            }
+            if (isPromise(result.value)){
+              result.value.then(next)
+            } else {
+              next(result.value)
+            }
+          }
+          next()
+        })
+      }
+
+      genThunk(gen).then(res => {
+        console.log(res)
+      })
+
+
+  </script>
+</body>
+</html>
