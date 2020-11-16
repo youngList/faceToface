@@ -1,0 +1,65 @@
+<!--
+ * @Author: ygw
+ * @Date: 2020-05-20 10:13:40
+ * @LastEditors: your name
+ * @LastEditTime: 2020-05-21 09:31:37
+ * @Description: file content
+ * @FilePath: /faceToFace/observer.html
+--> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>观察者订阅者</title>
+</head>
+<body>
+  <div onClick="setMsg()">setMsg</div>
+  <script>
+    let msg = 0;
+    class Subject {
+      constructor() {
+        this.msg = '';
+        this.watchArray = [];
+      }
+      getMsg () {
+        return this.msg;
+      }
+      setMsg (msg) {
+        this.msg = msg;
+        this.noticeALl();
+      }
+      noticeALl () {
+        this.watchArray.map(item => {
+          item.update(this.getMsg())
+          });
+      }
+      attatch (obj) {
+          const {update, name} = obj
+          this.watchArray.push({update});
+      }
+    }
+    
+    class Observer {
+      constructor(name, subject) {
+        this.name = name;
+        subject.attatch({
+          update: this.update,
+          // name: this.name
+        })
+      }
+      update (val) {
+        console.log(this);
+        console.log(`更新了${val}`);
+      }
+    }
+    const sub = new Subject();
+    const ob1 = new Observer('ob1', sub);
+    const setMsg = () => {
+      sub.setMsg(msg++)
+    };
+
+  </script>
+</body>
+</html>

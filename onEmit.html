@@ -1,0 +1,46 @@
+<!--
+ * @Author: ygw
+ * @Date: 2020-05-21 11:13:54
+ * @LastEditors: your name
+ * @LastEditTime: 2020-05-21 15:00:23
+ * @Description: file content
+ * @FilePath: /faceToFace/onEmit.html
+--> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>发布订阅模式</title>
+</head>
+<body>
+  <button type="text" onclick="trigger()">发布</button>
+  <script>
+    const Event = {
+      listeners: {},
+      on (type, fn) {
+        (this.listeners[type] || (this.listeners[type]=[])).push(fn);
+      },
+      emit (type, message) {
+        (this.listeners[type] || []).map(item => {
+          item.call(this, message)
+        })
+      }
+    }
+    Event.on('click', (msg) => {
+      console.log(`xm: ${msg}`);
+    })
+    Event.on('click', (msg) => {
+      console.log(`ygw: ${msg}`)
+    })
+    Event.emit('click', '这是一个点击事件！')
+    const trigger = () => {
+      const msg = prompt('请输入要发布的信息', '这是一个新的点击事件');
+      if (msg!=null && msg!="") {
+        Event.emit('click', msg);
+      }
+    }
+  </script>
+</body>
+</html>

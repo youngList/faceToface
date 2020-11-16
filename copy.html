@@ -2,9 +2,9 @@
  * @Author: ygw
  * @Date: 2020-03-05 18:10:32
  * @LastEditors: your name
- * @LastEditTime: 2020-03-24 16:33:53
+ * @LastEditTime: 2020-06-30 11:11:31
  * @Description: file content
- * @FilePath: /faceToFace/copy.html
+ * @FilePath: /demo/faceToFace/copy.html
  -->
 <!DOCTYPE html>
 <html lang="en">
@@ -237,6 +237,178 @@ root.children[0].name += '111'
 root.children[2].child[0] += '1111'
 
 console.log(root, newRoot)
+
+let treeData = [
+  {
+    code: '1',
+    selected: false,
+    parentCode: '1',
+    menus: [
+      {
+        code: '11',
+        selected: false,
+        parentCode: '1-11',
+        menus: [
+          {
+            code: '111',
+            selected: true,
+            parentCode: '1-11-111',
+          },
+          {
+            code: '112',
+            selected: false,
+            parentCode: '1-11-112',
+          },
+        ]
+      },
+      {
+        code: '12',
+        selected: true,
+        parentCode: '1-12',
+        menus: [
+          {
+            code: '121',
+            selected: false,
+            parentCode: '1-12-121',
+          },
+        ]
+      }
+    ]
+  },
+  {
+    code: '2',
+    selected: false,
+    parentCode: '2',
+    menus: [
+      {
+        code: '21',
+        selected: true,
+        parentCode: '2-21',
+        menus: [
+          {
+            code: '211',
+            selected: false,
+            parentCode: '2-21-211',
+          },
+        ]
+      },
+    ]
+  }
+]
+
+let arr1 = [treeData];
+let arr2 = [];
+let arr3 = [];
+
+// while(arr1.length) {
+//   let target = arr1.pop();
+//   if (isArr(target)) {
+//     target.map(item => {
+//       if (item.menus && item.menus.length) {
+//         item.isLeaf = false;
+//         arr1.unshift(item)
+//       } else {
+//         item.isLeaf = true;
+//       }
+//       arr2.push(item)
+//     })
+//   }
+//   if (isObj(target)) {
+//     if (target.menus && target.menus.length) {
+//       target.isLeaf = false
+//       arr1.push(target.menus)
+//     } else {
+//       target.isLeaf = true
+//     }
+//   }
+// }
+// while(arr2.length) {
+//   let target = arr2.pop();
+//   console.log('---------------------------target2--------------------------')
+//   console.log(target);
+// }
+// console.log('---------------------------target2--------------------------')
+// console.log(arr2)
+
+function test(tree) {
+  if (isArr(tree)) {
+    tree.map(item => {
+      if (item.menus && item.menus.length) {
+        item.isLeaf = false;
+        test(item.menus)
+      } else {
+        item.isLeaf = true;
+      }
+      arr3.unshift(item)
+    })
+  }
+  if (isObj(tree)) {
+    if (tree.menus && tree.menus.length) {
+      tree.isLeaf = false
+      test(tree.menus)
+    } else {
+      tree.isLeaf = true
+    }
+  }
+}
+
+test(treeData)
+console.log('---------------------------arr3--------------------------')
+
+console.log(arr3);
+
+console.log(treeData)
+
+let isSave = false;
+let arr4 = [];
+
+while(arr3.length) {
+  let target = arr3.pop()
+  if (target.isLeaf) {
+    if (target.selected == true) {
+      isSave = true
+      delete target.menus
+      delete target.isLeaf
+      arr4.push(target)
+    }
+  } else {
+    if (target.code == target.parentCode) {
+      if (isSave) {
+        delete target.menus
+        delete target.isLeaf
+        arr4.push(target)
+        isSave = false;
+      }
+    } else {
+      if (isSave) {
+        delete target.menus
+        delete target.isLeaf
+        arr4.push(target)
+      }
+    }
+  }
+}
+
+console.log(arr4)
+
+let tree = []
+arr4.map(item => {
+  const parentCodeArr = item.parentCode.split('-');
+  if (parentCodeArr && parentCodeArr.length > 1) {
+    let parent = arr4.find(it => it.code == parentCodeArr[parentCodeArr.length - 2])
+    if (parent.menus) {
+      parent.menus.push(item)
+    } else {
+      parent.menus = [item]
+    }
+  }
+  if (parentCodeArr && parentCodeArr.length == 1) {
+    tree.push(item)
+  }
+})
+
+console.log(tree);
+
   </script>
 </body>
 </html>

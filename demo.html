@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const isObj = (item) => ['object'].includes(Object.prototype.toString.call(item).slice(8, -1).toLowerCase());
+    const isArr = (item) => ['array'].includes(Object.prototype.toString.call(item).slice(8, -1).toLowerCase());
+  let treeData = [
+  {
+    code: '1',
+    selected: false,
+    parentCode: '1',
+    menus: [
+      {
+        code: '11',
+        selected: false,
+        parentCode: '1-11',
+        menus: [
+          {
+            code: '111',
+            selected: true,
+            parentCode: '1-11-111',
+          },
+          {
+            code: '112',
+            selected: false,
+            parentCode: '1-11-112',
+          },
+        ]
+      },
+      {
+        code: '12',
+        selected: true,
+        parentCode: '1-12',
+        menus: [
+          {
+            code: '121',
+            selected: false,
+            parentCode: '1-12-121',
+          },
+        ]
+      }
+    ]
+  },
+  {
+    code: '2',
+    selected: false,
+    parentCode: '2',
+    menus: [
+      {
+        code: '21',
+        selected: true,
+        parentCode: '2-21',
+        menus: [
+          {
+            code: '211',
+            selected: false,
+            parentCode: '2-21-211',
+          },
+        ]
+      },
+    ]
+  }
+]
+
+
+let arr3 = [];
+
+function test(tree) {
+  if (isArr(tree)) {
+    tree.map(item => {
+      if (item.menus && item.menus.length) {
+        item.isLeaf = false;
+        test(item.menus)
+      } else {
+        item.isLeaf = true;
+      }
+      arr3.unshift(item)
+    })
+  }
+  if (isObj(tree)) {
+    if (tree.menus && tree.menus.length) {
+      tree.isLeaf = false
+      test(tree.menus)
+    } else {
+      tree.isLeaf = true
+    }
+  }
+}
+
+test(treeData)
+
+let isSave = false;
+let arr4 = [];
+
+while(arr3.length) {
+  let target = arr3.pop()
+  if (target.isLeaf) {
+    if (target.selected == true) {
+      isSave = true
+      delete target.menus
+      delete target.isLeaf
+      arr4.push(target)
+    }
+  } else {
+    if (target.code == target.parentCode) {
+      if (isSave) {
+        delete target.menus
+        delete target.isLeaf
+        arr4.push(target)
+        isSave = false;
+      }
+    } else {
+      if (isSave) {
+        delete target.menus
+        delete target.isLeaf
+        arr4.push(target)
+      }
+    }
+  }
+}
+
+let tree = []
+arr4.map(item => {
+  const parentCodeArr = item.parentCode.split('-');
+  if (parentCodeArr && parentCodeArr.length > 1) {
+    let parent = arr4.find(it => it.code == parentCodeArr[parentCodeArr.length - 2])
+    if (parent.menus) {
+      parent.menus.push(item)
+    } else {
+      parent.menus = [item]
+    }
+  }
+  if (parentCodeArr && parentCodeArr.length == 1) {
+    tree.push(item)
+  }
+})
+
+console.log(tree);
+  </script>
+</body>
+</html>

@@ -2,7 +2,7 @@
  * @Author: ygw
  * @Date: 2020-03-20 16:03:04
  * @LastEditors: your name
- * @LastEditTime: 2020-03-23 15:19:31
+ * @LastEditTime: 2020-05-08 16:36:57
  * @Description: file content
  * @FilePath: /faceToFace/bibao.html
  -->
@@ -58,6 +58,20 @@
     //   i++
     //   aa(i)
     // }, 1000)
+
+    const sleep = () => {
+      setTimeout(() => {
+        return 2
+      })
+    }
+
+    const aa = async () => {
+      let result = 1;
+      result = await sleep()
+      return result
+    }
+
+    console.log(aa())
 
   </script>
 </body>

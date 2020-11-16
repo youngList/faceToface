@@ -1,0 +1,30 @@
+<!--
+ * @Author: ygw
+ * @Date: 2020-04-10 10:19:11
+ * @LastEditors: your name
+ * @LastEditTime: 2020-04-10 10:26:06
+ * @Description: file content
+ * @FilePath: /faceToFace/Symbol.html
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Symbol</title>
+</head>
+<body>
+  <script>
+    class diyArray extends Array{
+      get [Symbol.species]() {
+        console.log('diy array')
+        return Array
+      }
+    }
+    const diy = new diyArray(1,2,3,4)
+    const aa = diy.map(item => item*2)
+
+  </script>
+</body>
+</html>
