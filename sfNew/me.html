@@ -1,0 +1,63 @@
+<!--
+ * @Author: ygw
+ * @Date: 2020-11-14 15:26:34
+ * @LastEditors: your name
+ * @Description: file content
+ * @FilePath: /demo/sfNew/me.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+  <link rel="stylesheet" href="./me.css">
+</head>
+<body ng-app='myApp'>
+  <div ng-controller='myCtrl' ng-cloak class="container">
+    <header>首页</header>
+    <section class="logo-container background-white">
+      <img class="logo" src={{sourceData.logoUrl}} alt="">
+      <h4 class="name">{{sourceData.companyName}}</h4>
+    </section>
+    <section ng-repeat="item in sourceData.info" :key="" class="detail-container background-white">
+      <ul class="detail-inner">
+        <li class="detail-item">
+          <img class="detail-icon" src="" alt="">
+          <span class="detail-name">{{item.userName}}</span>
+        </li>
+        <li ng-repeat="it in item.telNum" class="detail-item" ng-click="handleTel(it)">
+          <img class="detail-icon" src="" alt="">
+          <span class="detail-name">{{it}}</span>
+        </li>
+        <li class="detail-item" ng-click="handleAddress(item.address, item.lat, item.lng)">
+          <img class="detail-icon" src="" alt="">
+          <span class="detail-name">{{item.address}}</span>
+        </li>
+      </ul>
+      <div class="copy" ng-click="handleCopy">复制</div>
+    </section>
+    <div ng-if="telVisible" class="tel-modal">
+      <a ng-click="handleHideTel()" class="tel" href={{telPhone}}>呼叫：{{tel}}</a>
+      <button class="cancel" ng-click="handleHideTel()">取消</button>
+    </div>
+    <div class="tel-modal" ng-if="adVisible">
+      <ul class="map-ul">
+        <li class="map-li" ng-click="handleMap('gd')">
+          <div>高德地图</div>
+        </li>
+        <li class="map-li" ng-click="handleMap('bd')">
+            <div>百度地图</div>
+        </li>
+        <li class="map-li" ng-click="handleMap('tx')">
+          <div>腾讯地图</div>
+        </li>
+      </ul>
+      <button class="cancel" ng-click="handleHideAddress()">取消</button>
+    </div>
+  </div>
+  <script src="./me.js"></script>
+</body>
+</html>
